@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Bulletin Board</title>
+    <link rel="stylesheet" href="style.css">
+
+    <!-- FIREBASE SDK - COMPAT VERSION -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-storage-compat.js"></script>
+
+    <script>
+        // Firebase config - INITIALIZE HERE
+        const firebaseConfig = {
+          apiKey: "AIzaSyBwD_J2y1Nf1C5uQrfo5T-KMIWy-PSI3Q0",
+          authDomain: "quantumboard9.firebaseapp.com",
+          projectId: "quantumboard9",
+          storageBucket: "quantumboard9.firebasestorage.app",
+          messagingSenderId: "727280019376",
+          appId: "1:727280019376:web:c16d18b68a7a1aebbe1875",
+          measurementId: "G-SM8BSDK9EV"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        // IMPORTANT: create the same globals that app.js expects
+        window.auth = firebase.auth();
+        window.db = firebase.firestore();
+        window.storage = firebase.storage();
+
+        console.log('INIT: auth =', window.auth, 'db =', window.db, 'storage =', window.storage);
+    </script>
+</head>
+<body>
+    <!-- AUTH PAGES (Signup/Login) -->
+    <div id="authContainer" class="container">
+        <div class="auth-box">
+            <h1>Smart Bulletin Board</h1>
+
+            <!-- Loading Indicator -->
+            <div id="firebaseLoading" class="loading-section">
+                <p>Loading Firebase...</p>
+            </div>
+
+            <!-- Login Form -->
+            <div id="loginForm" class="form-section hidden">
+                <h2>Login</h2>
+                <input type="email" id="loginEmail" placeholder="Email" required>
+                <input type="password" id="loginPassword" placeholder="Password" required>
+                <select id="loginRole">
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+                <button onclick="login()">Login</button>
+                <p>Don't have account? <a href="#" onclick="toggleForm()">Sign Up</a></p>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="form-section hidden">
+                <h2>Sign Up</h2>
+                <input type="text" id="signupName" placeholder="Full Name" required>
+                <input type="email" id="signupEmail" placeholder="Email" required>
+                <input type="password" id="signupPassword" placeholder="Password" required>
+                <select id="signupRole" onchange="toggleFacultyIdField()">
+                    <option value="student">Student</option>
+                    <option value="faculty">Faculty</option>
+                </select>
+
+                <!-- Faculty ID Field (hidden by default) -->
+                <input type="text" id="facultyId" placeholder="Faculty ID (required for Faculty)" style="display:none;">
+
+                <button onclick="signup()">Sign Up</button>
+                <p>Already have account? <a onclick="toggleForm()">Login</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN APP (After Login) -->
+    <div id="appContainer" class="container hidden">
+        <div class="header">
+            <h1>📋 Smart Bulletin Board</h1>
+            <div class="user-info">
+                <span id="userEmail"></span>
+                <span id="userRole"></span>
+                <button onclick="logout()" class="logout-btn">Logout</button>
+            </div>
+        </div>
+
+        <!-- FACULTY PANEL (Post Notice) -->
+        <div id="facultyPanel" class="hidden">
+            <div class="section faculty-section">
+                <h2>📝 Post New Notice</h2>
+                <input type="text" id="noticeTitle" placeholder="Notice Title" required>
+                <textarea id="noticeContent" placeholder="Notice Content" rows="5" required></textarea>
+                <label><input type="checkbox" id="isEvent"> Mark as Event</label>
+                <button onclick="postNotice()" class="btn-primary">Post Notice</button>
+                <div id="analysisResult" class="hidden">
+                    <h3>📊 AI Analysis</h3>
+                    <p><strong>Category:</strong> <span id="analysisCategory"></span></p>
+                    <p><strong>Importance:</strong> <span id="analysisImportance"></span></p>
+                    <p><strong>Tags:</strong> <span id="analysisTags"></span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- NOTICES DISPLAY (For All Users) -->
+        <div class="section notices-section">
+            <h2>📢 All Notices</h2>
+            <div id="noticesList" class="notices-grid">
+                <p>Loading notices...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loadingIndicator" class="hidden">
+        <p>Processing with AI...</p>
+    </div>
+
+    <!-- APP LOGIC -->
+    <script src="app.js"></script>
+</body>
+</html>

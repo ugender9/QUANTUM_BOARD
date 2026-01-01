@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: smart-bulletin-board-backend
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: GEMINI_API_KEY
+        sync: false  # You'll set this manually in Render dashboard

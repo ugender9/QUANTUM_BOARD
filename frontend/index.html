@@ -1,221 +1,316 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Smart Bulletin Board - Login & Management</title>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); min-height: 100vh; display: flex; justify-content: center; align-items: center; }
-        .auth-container { background: white; border-radius: 10px; box-shadow: 0 10px 25px rgba(0,0,0,0.2); width: 100%; max-width: 450px; padding: 40px; }
-        .auth-header { text-align: center; margin-bottom: 30px; }
-        .auth-header h1 { color: #2c3e50; font-size: 28px; margin-bottom: 10px; }
-        .auth-header p { color: #7f8c8d; font-size: 14px; }
-        .toggle-buttons { display: flex; gap: 10px; margin-bottom: 30px; border-radius: 8px; background: #ecf0f1; padding: 4px; }
-        .toggle-btn { flex: 1; padding: 12px; border: none; background: transparent; cursor: pointer; font-size: 14px; font-weight: bold; color: #7f8c8d; transition: 0.3s; border-radius: 6px; }
-        .toggle-btn.active { background: white; color: #667eea; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
-        .form-group { margin-bottom: 20px; }
-        .form-group label { display: block; margin-bottom: 8px; color: #2c3e50; font-weight: bold; font-size: 14px; }
-        .form-group input, .form-group select { width: 100%; padding: 12px; border: 2px solid #ecf0f1; border-radius: 8px; font-size: 14px; transition: 0.3s; font-family: inherit; }
-        .form-group input:focus, .form-group select:focus { outline: none; border-color: #667eea; box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1); }
-        .submit-btn { width: 100%; padding: 12px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; transition: 0.3s; margin-top: 10px; }
-        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4); }
-        .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .message { padding: 12px 16px; border-radius: 8px; margin-bottom: 20px; font-size: 14px; }
-        .message.success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
-        .message.error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
-        .loading { text-align: center; color: #7f8c8d; }
-        .hidden { display: none; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Bulletin Board - Login & Management</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .auth-container {
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+      width: 100%;
+      max-width: 450px;
+      padding: 40px;
+    }
+    .auth-header { text-align: center; margin-bottom: 30px; }
+    .auth-header h1 { color: #2c3e50; font-size: 28px; margin-bottom: 10px; }
+    .auth-header p { color: #7f8c8d; font-size: 14px; }
+
+    .toggle-buttons {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 30px;
+      border-radius: 8px;
+      background: #ecf0f1;
+      padding: 4px;
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: bold;
+      color: #7f8c8d;
+      transition: 0.3s;
+      border-radius: 6px;
+    }
+    .toggle-btn.active {
+      background: white;
+      color: #667eea;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label {
+      display: block;
+      margin-bottom: 8px;
+      color: #2c3e50;
+      font-weight: bold;
+      font-size: 14px;
+    }
+    .form-group input,
+    .form-group select {
+      width: 100%;
+      padding: 12px;
+      border: 2px solid #ecf0f1;
+      border-radius: 8px;
+      font-size: 14px;
+      transition: 0.3s;
+      font-family: inherit;
+    }
+    .form-group input:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: #667eea;
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 12px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+      margin-top: 10px;
+    }
+    .submit-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 15px rgba(102, 126, 234, 0.4);
+    }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .message {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .message.success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .message.error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .hidden { display: none; }
+  </style>
 </head>
 <body>
-    <div class="auth-container">
-        <div class="auth-header">
-            <h1>📋 Smart Bulletin Board</h1>
-            <p>Campus Notice Management System</p>
-        </div>
-        
-        <!-- Toggle between Student and Faculty -->
-        <div class="toggle-buttons">
-            <button class="toggle-btn active" onclick="toggleView('student')">Student Login</button>
-            <button class="toggle-btn" onclick="toggleView('faculty')">Faculty Login</button>
-        </div>
-
-        <!-- Error/Success Messages -->
-        <div id="authMessage" class="message hidden"></div>
-
-        <!-- Student Login Form -->
-        <form id="studentLoginForm" class="auth-form" onsubmit="handleLogin(event, 'student')">
-            <div class="form-group">
-                <label>Email Address</label>
-                <input type="email" id="studentEmail" required placeholder="your.email@student.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="studentPassword" required placeholder="Enter your password">
-            </div>
-            <div class="form-group">
-                <label>Department</label>
-                <select id="studentDept">
-                    <option value="CSE">CSE - Computer Science</option>
-                    <option value="ECE">ECE - Electronics</option>
-                    <option value="MECH">MECH - Mechanical</option>
-                    <option value="CIVIL">CIVIL - Civil Engineering</option>
-                </select>
-            </div>
-            <button type="submit" class="submit-btn">Login as Student</button>
-            <p style="text-align: center; margin-top: 15px; color: #7f8c8d; font-size: 14px;">
-                Don't have an account? <a href="#" onclick="toggleForm()" style="color: #667eea; text-decoration: none;">Sign Up</a>
-            </p>
-        </form>
-
-        <!-- Faculty Login Form -->
-        <form id="facultyLoginForm" class="auth-form hidden" onsubmit="handleLogin(event, 'faculty')">
-            <div class="form-group">
-                <label>Faculty Email Address</label>
-                <input type="email" id="facultyEmail" required placeholder="faculty@institution.com">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" id="facultyPassword" required placeholder="Enter your password">
-            </div>
-            <div class="form-group">
-                <label>Faculty ID</label>
-                <input type="text" id="facultyId" required placeholder="e.g., FAC001">
-            </div>
-            <button type="submit" class="submit-btn">Login as Faculty</button>
-            <p style="text-align: center; margin-top: 15px; color: #7f8c8d; font-size: 14px;">
-                Don't have an account? <a href="#" onclick="toggleForm()" style="color: #667eea; text-decoration: none;">Sign Up</a>
-            </p>
-        </form>
+  <div class="auth-container">
+    <div class="auth-header">
+      <h1>📋 Smart Bulletin Board</h1>
+      <p>Campus Notice Management System</p>
     </div>
 
-    <!-- Firebase SDK v11 (Modular) -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js';
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js';
-        import { getFirestore, collection, addDoc, query, where, getDocs, deleteDoc, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js';
+    <!-- Toggle between Student and Faculty -->
+    <div class="toggle-buttons">
+      <button class="toggle-btn active" onclick="toggleView(event, 'student')">Student Login</button>
+      <button class="toggle-btn" onclick="toggleView(event, 'faculty')">Faculty Login</button>
+    </div>
 
-        // Firebase Configuration
-        const firebaseConfig = {
-            apiKey: "AIzaSyAUAEUlsl11gAVD_o4iiLK-9EBMd928wS8",
-            authDomain: "techsprint-smartboard-d0a55.firebaseapp.com",
-            databaseURL: "https://techsprint-smartboard-d0a55-default-rtdb.firebaseio.com",
-            projectId: "techsprint-smartboard-d0a55",
-            storageBucket: "techsprint-smartboard-d0a55.firebasestorage.app",
-            messagingSenderId: "437326267964",
-            appId: "1:437326267964:web:c70536d8ec8d3abecae539",
-            measurementId: "G-MEPRGVM17Q"
-        };
+    <!-- Error/Success Messages -->
+    <div id="authMessage" class="message hidden"></div>
 
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
+    <!-- Student Login Form -->
+    <form id="studentLoginForm" class="auth-form" onsubmit="handleLogin(event, 'student')">
+      <div class="form-group">
+        <label>Email Address</label>
+        <input type="email" id="studentEmail" required placeholder="your.email@student.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="studentPassword" required placeholder="Enter your password">
+      </div>
+      <div class="form-group">
+        <label>Department</label>
+        <select id="studentDept">
+          <option value="CSE">CSE - Computer Science</option>
+          <option value="ECE">ECE - Electronics</option>
+          <option value="MECH">MECH - Mechanical</option>
+          <option value="CIVIL">CIVIL - Civil Engineering</option>
+        </select>
+      </div>
+      <button type="submit" class="submit-btn">Login as Student</button>
+      <p style="text-align: center; margin-top: 15px; color: #7f8c8d; font-size: 14px;">
+        Don't have an account?
+        <a href="#" onclick="toggleForm()" style="color: #667eea; text-decoration: none;">Sign Up</a>
+      </p>
+    </form>
 
-        window.auth = auth;
-        window.db = db;
-        window.getAuth = getAuth;
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-        window.onAuthStateChanged = onAuthStateChanged;
-        window.collection = collection;
-        window.addDoc = addDoc;
-        window.query = query;
-        window.where = where;
-        window.getDocs = getDocs;
-        window.deleteDoc = deleteDoc;
-        window.doc = doc;
-        window.updateDoc = updateDoc;
+    <!-- Faculty Login Form -->
+    <form id="facultyLoginForm" class="auth-form hidden" onsubmit="handleLogin(event, 'faculty')">
+      <div class="form-group">
+        <label>Faculty Email Address</label>
+        <input type="email" id="facultyEmail" required placeholder="faculty@institution.com">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" id="facultyPassword" required placeholder="Enter your password">
+      </div>
+      <div class="form-group">
+        <label>Faculty ID</label>
+        <input type="text" id="facultyId" required placeholder="e.g., FAC001">
+      </div>
+      <button type="submit" class="submit-btn">Login as Faculty</button>
+      <p style="text-align: center; margin-top: 15px; color: #7f8c8d; font-size: 14px;">
+        Don't have an account?
+        <a href="#" onclick="toggleForm()" style="color: #667eea; text-decoration: none;">Sign Up</a>
+      </p>
+    </form>
+  </div>
 
-        console.log("✅ Firebase initialized successfully!");
-    </script>
+  <!-- Firebase SDK v11 (Modular) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-analytics.js";
+    import {
+      getAuth,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      signOut,
+      createUserWithEmailAndPassword
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      addDoc,
+      query,
+      where,
+      getDocs,
+      deleteDoc,
+      doc,
+      updateDoc
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-firestore.js";
 
-    <script>
-        // Global variables
-        let currentUserType = 'student';
-        let currentUser = null;
+    const firebaseConfig = {
+      apiKey: "AIzaSyBwD_J2y1Nf1C5uQrfo5T-KMIWy-PSI3Q0",
+      authDomain: "quantumboard9.firebaseapp.com",
+      projectId: "quantumboard9",
+      storageBucket: "quantumboard9.firebasestorage.app",
+      messagingSenderId: "727280019376",
+      appId: "1:727280019376:web:c16d18b68a7a1aebbe1875",
+      measurementId: "G-SM8BSDK9EV"
+    };
 
-        // Toggle between student and faculty login
-        function toggleView(type) {
-            currentUserType = type;
-            document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
-            event.target.classList.add('active');
-            
-            document.getElementById('studentLoginForm').classList.toggle('hidden', type !== 'student');
-            document.getElementById('facultyLoginForm').classList.toggle('hidden', type !== 'faculty');
-            document.getElementById('authMessage').classList.add('hidden');
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    window.auth = auth;
+    window.db = db;
+    window.getAuth = getAuth;
+    window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+    window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+    window.signOut = signOut;
+    window.onAuthStateChanged = onAuthStateChanged;
+    window.collection = collection;
+    window.addDoc = addDoc;
+    window.query = query;
+    window.where = where;
+    window.getDocs = getDocs;
+    window.deleteDoc = deleteDoc;
+    window.doc = doc;
+    window.updateDoc = updateDoc;
+
+    console.log("✅ Firebase initialized successfully!");
+  </script>
+
+  <!-- App logic -->
+  <script>
+    let currentUserType = 'student';
+    let currentUser = null;
+
+    function toggleView(event, type) {
+      currentUserType = type;
+      document.querySelectorAll('.toggle-btn').forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+
+      document.getElementById('studentLoginForm').classList.toggle('hidden', type !== 'student');
+      document.getElementById('facultyLoginForm').classList.toggle('hidden', type !== 'faculty');
+      document.getElementById('authMessage').classList.add('hidden');
+    }
+
+    function showMessage(text, type) {
+      const messageDiv = document.getElementById('authMessage');
+      messageDiv.textContent = text;
+      messageDiv.className = 'message ' + type;
+      messageDiv.classList.remove('hidden');
+    }
+
+    async function handleLogin(event, userType) {
+      event.preventDefault();
+      const messageDiv = document.getElementById('authMessage');
+
+      try {
+        let email, password;
+
+        if (userType === 'student') {
+          email = document.getElementById('studentEmail').value;
+          password = document.getElementById('studentPassword').value;
+          const dept = document.getElementById('studentDept').value;
+        } else {
+          email = document.getElementById('facultyEmail').value;
+          password = document.getElementById('facultyPassword').value;
         }
 
-        // Handle login for both student and faculty
-        async function handleLogin(event, userType) {
-            event.preventDefault();
-            const messageDiv = document.getElementById('authMessage');
-            
-            try {
-                let email, password;
-                
-                if (userType === 'student') {
-                    email = document.getElementById('studentEmail').value;
-                    password = document.getElementById('studentPassword').value;
-                    const dept = document.getElementById('studentDept').value;
-                } else {
-                    email = document.getElementById('facultyEmail').value;
-                    password = document.getElementById('facultyPassword').value;
-                }
+        const userCredential = await window.signInWithEmailAndPassword(window.auth, email, password);
+        currentUser = userCredential.user;
 
-                // Sign in with Firebase Auth
-                const userCredential = await window.signInWithEmailAndPassword(window.auth, email, password);
-                currentUser = userCredential.user;
+        showMessage('✅ Login successful! Redirecting...', 'success');
 
-                showMessage('✅ Login successful! Redirecting...', 'success');
-                
-                // Store user type and info in localStorage
-                localStorage.setItem('userType', userType);
-                localStorage.setItem('userId', currentUser.uid);
-                localStorage.setItem('userEmail', currentUser.email);
-                
-                if (userType === 'student') {
-                    localStorage.setItem('userDept', document.getElementById('studentDept').value);
-                    setTimeout(() => window.location.href = '/student-dashboard.html', 1500);
-                } else {
-                    localStorage.setItem('facultyId', document.getElementById('facultyId').value);
-                    setTimeout(() => window.location.href = '/faculty-dashboard.html', 1500);
-                }
-            } catch (error) {
-                console.error('Login error:', error);
-                if (error.code === 'auth/user-not-found') {
-                    showMessage('❌ User not found. Please sign up first.', 'error');
-                } else if (error.code === 'auth/wrong-password') {
-                    showMessage('❌ Incorrect password.', 'error');
-                } else {
-                    showMessage('❌ Login failed: ' + error.message, 'error');
-                }
-            }
+        localStorage.setItem('userType', userType);
+        localStorage.setItem('userId', currentUser.uid);
+        localStorage.setItem('userEmail', currentUser.email);
+
+        if (userType === 'student') {
+          localStorage.setItem('userDept', document.getElementById('studentDept').value);
+          setTimeout(() => window.location.href = '/student-dashboard.html', 1500);
+        } else {
+          localStorage.setItem('facultyId', document.getElementById('facultyId').value);
+          setTimeout(() => window.location.href = '/faculty-dashboard.html', 1500);
         }
-
-        // Show success/error messages
-        function showMessage(text, type) {
-            const messageDiv = document.getElementById('authMessage');
-            messageDiv.textContent = text;
-            messageDiv.className = 'message ' + type;
-            messageDiv.classList.remove('hidden');
+      } catch (error) {
+        console.error('Login error:', error);
+        if (error.code === 'auth/user-not-found') {
+          showMessage('❌ User not found. Please sign up first.', 'error');
+        } else if (error.code === 'auth/wrong-password') {
+          showMessage('❌ Incorrect password.', 'error');
+        } else {
+          showMessage('❌ Login failed: ' + error.message, 'error');
         }
+      }
+    }
 
-        // Toggle between login and signup
-        function toggleForm() {
-            // This would be extended to show signup form
-            alert('Sign up functionality coming soon!');
-        }
+    function toggleForm() {
+      alert('Sign up functionality coming soon!');
+    }
 
-        // Check if user is already logged in
-        window.onAuthStateChanged(window.auth, (user) => {
-            if (user) {
-                console.log('User already logged in:', user.email);
-                // Redirect to appropriate dashboard
-            }
-        });
-    </script>
+    window.onAuthStateChanged(window.auth, (user) => {
+      if (user) {
+        console.log('User already logged in:', user.email);
+      }
+    });
+  </script>
 </body>
 </html>

@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "techsprint-smartboard-d0a55"
-  }
+    "default": "quantumboard9",
+    "quantum": "quantumboard9"
+  },
+  "targets": {},
+  "etags": {}
 }

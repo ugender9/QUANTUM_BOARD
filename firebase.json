@@ -1,6 +1,10 @@
 {
+  "functions": {
+    "source": "functions",
+    "runtime": "python313"
+  },
   "hosting": {
-    "public": "frontend",
+    "public": "public",
     "ignore": [
       "firebase.json",
       "**/.*",
@@ -8,8 +12,31 @@
     ],
     "rewrites": [
       {
+        "source": "/api/health",
+        "function": "api_health"
+      },
+      {
+        "source": "/api/notices",
+        "function": "api_notices"
+      },
+      {
+        "source": "/api/notices/search",
+        "function": "api_notices_search"
+      },
+      {
         "source": "**",
         "destination": "/index.html"
+      }
+    ],
+    "headers": [
+      {
+        "source": "**",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "no-cache"
+          }
+        ]
       }
     ]
   }
