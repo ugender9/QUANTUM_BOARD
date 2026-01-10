@@ -18,7 +18,7 @@ An intelligent notice management platform that uses **Google's Gemini AI** to au
 
 ## 🌐 Live Application
 
-🚀 **Visit Now:** https://quantumdashboard9.web.app
+🚀 **Visit Now:** https://quantumboard9.web.app
 
 ### 📍 Quick Links
 
